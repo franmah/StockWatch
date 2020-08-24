@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiCommon, StockHistoricalData, StockRange, StockIntradayData } from '../../shared-ressources/apiParameters';
+import { ApiCommon, StockHistoricalData, StockRange, StockIntradayData, StockEarningParameters } from '../../shared-ressources/apiParameters';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,25 @@ export class CompanyService {
   getIntradayStockData(symbol: string) {
     let url = ApiCommon.baseTestUrl + ApiCommon.stableVersion + StockHistoricalData.baseUrl + symbol + "/" +
       StockIntradayData.baseUrl + "?" + ApiCommon.tokenKeyTest;
-      
+
+    return this.http.get(url);
+  }
+
+  /**
+   * Returns an array of possible companies matching the fragment.
+   * @param fragment Can be the name of a company or its symbol.
+   */
+  searchForCompany(fragment: string) {
+    // example url: https://sandbox.iexapis.com/stable/search/tesla?token=Tpk_72893886b1a34cfd99fe3769cc8b7fd3
+    let url = ApiCommon.baseTestUrl + ApiCommon.stableVersion + "search/" + fragment + "?" + ApiCommon.tokenKeyTest;
+    return this.http.get(url);
+  }
+
+  getEarnings(symbol: string, numYears: number = 1) {
+    // /stock/{symbol}/earnings/{last}?period=annual
+    let url = ApiCommon.baseTestUrl + ApiCommon.stableVersion + ApiCommon.stock + symbol + "/" + 
+          StockEarningParameters.baseUrl + numYears  + "?" + ApiCommon.tokenKeyTest + StockEarningParameters.period; 
+    console.log(url)
     return this.http.get(url);
   }
 }

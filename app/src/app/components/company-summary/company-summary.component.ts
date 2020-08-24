@@ -53,6 +53,7 @@ export class CompanySummaryComponent implements OnInit {
           this.setupIntradayChart(response);
         },
         error => {
+          this.symbol = "Error finding : " + this.symbol;
           console.log(`Error getting intraday data for ${this.symbol}: \n${error}`);
         }
       )
@@ -86,7 +87,7 @@ export class CompanySummaryComponent implements OnInit {
       });
     });
 
-    this.setupChart(chartData, times);
+    this.createChart(chartData, times);
   }
 
   setupHistoricalChart(data): void {
@@ -100,12 +101,12 @@ export class CompanySummaryComponent implements OnInit {
       });
     });
 
-    this.setupChart(chartData, dates);
+    this.createChart(chartData, dates);
   }
 
   /** CHART HELPER FUNCTIONS */
 
-  setupChart(data, labels) {
+  createChart(data, labels) {
     this.clearChart();
     let canvasElement = document.getElementsByClassName(this.canvasClass); // TODO: angular advise against using document directly
     this.chart = new Chart(canvasElement[0], {
