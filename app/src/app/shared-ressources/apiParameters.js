@@ -6,17 +6,26 @@ const ApiCommon = {
     stableVersion: "stable/"
 }
 
+const StockRange = {
+    oneMonth: "1m",
+    sixMonth: "6m",
+    oneYear: "1y",
+    fiveYears: "5y",
+    today: "today"
+}
 const StockHistoricalData = {
     baseUrl: "stock/",
     chart: "chart/",
     chartCloseOnly: "chartCloseOnly=true",
-    oneMonth: "1m",
-    sixMonth: "6m",
-    oneYear: "1y",
-    fiveYears: "5y"
+}
+
+const StockIntradayData = {
+    baseUrl: "intraday-prices/"
 }
 
 module.exports = {
     ApiCommon,
-    StockHistoricalData
+    StockRange,
+    StockHistoricalData,
+    StockIntradayData
 };

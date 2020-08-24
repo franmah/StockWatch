@@ -4,13 +4,23 @@
 }
 
 .chart-container {
-    padding: 8px;
     order: 1;
+    padding: 8px;
     width: 50%;
     height: 50%;
 }
 
 .info-container {
-    padding-left: 8px;
     order: 2;
+    padding-left: 8px;
+}
+
+.range-button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.range-button {
+    margin: 2px 8px 2px 8px;
 }

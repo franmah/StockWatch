@@ -3,8 +3,16 @@
     <!-- CHART -->
     <div class="chart-container">
         <canvas [ngClass]="canvasClass">{{ chart }}</canvas>
+        <div class="range-button-container">
+            <button mat-raised-button class="range-button" (click)="updateRange('today')">today</button>
+            <button mat-raised-button class="range-button" (click)="updateRange('1m')">1m</button>
+            <button mat-raised-button class="range-button" (click)="updateRange('6m')">6m</button>
+            <button mat-raised-button class="range-button" (click)="updateRange('1y')">1y</button>
+            <button mat-raised-button class="range-button" (click)="updateRange('5y')">5y</button>
+        </div>
     </div>
 
+    <!-- COMPANY INFO -->
     <div class="info-container">
         <div>Symbol: {{symbol}}</div>
     </div>
