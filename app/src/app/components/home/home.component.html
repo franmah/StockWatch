@@ -1,1 +1,5 @@
-<p>home works!</p>
+
+
+<div *ngFor="let company of companiesFollowed">
+    <app-company-summary [symbol]="company" ></app-company-summary>
+</div>

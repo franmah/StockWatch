@@ -1,0 +1,13 @@
+.company-summary-container {
+    border: 2px solid;
+}
+
+.info-container {
+    display: inline;
+}
+
+#chart-canvas {
+    height: 50%;
+    width: 50%;
+    background-color: black;
+}
