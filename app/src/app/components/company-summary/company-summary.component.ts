@@ -13,6 +13,8 @@ export class CompanySummaryComponent implements OnInit {
   @Input() symbol: string;
   @ViewChild("chartCanvas") canvasRef: ElementRef;
 
+  canvasClass: string;
+
   chart: any[];
   
   constructor(
@@ -21,6 +23,8 @@ export class CompanySummaryComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.canvasClass = "canvas-" + this.symbol;
+
     this.companyService.getStockHistoricalData(this.symbol, StockHistoricalData.oneMonth)
         .subscribe(
           response => {
@@ -43,8 +47,8 @@ export class CompanySummaryComponent implements OnInit {
       });
     });
 
-    let canvasElement = document.getElementById("chartCanvas"); // TODO: angular advise against using document directly
-    this.chart = new Chart(canvasElement, {
+    let canvasElement = document.getElementsByClassName(this.canvasClass); // TODO: angular advise against using document directly
+    this.chart = new Chart(canvasElement[0], {
       type: 'line',
       data: {
         lablels: dates,
