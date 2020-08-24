@@ -76,7 +76,19 @@ export class CompanySummaryComponent implements OnInit {
   }
 
   setupIntradayChart(data): void {
+    let chartData = [], times = [];
 
+    data.forEach(stockInfo => {
+      times.push(stockInfo.label);
+      chartData.push({
+        t: new Date(stockInfo.date + "T" + stockInfo.minute),
+        y: stockInfo.average
+      });
+      let d = new Date(stockInfo.date + "T" + stockInfo.minue);
+      console.log(d.toDateString)
+    });
+
+    this.setupChart(chartData, times);
   }
 
   setupHistoricalChart(data): void {
@@ -90,15 +102,21 @@ export class CompanySummaryComponent implements OnInit {
       });
     });
 
-    let canvasElement = document.getElementsByClassName(this.canvasClass); // TODO: angular advise against using document directly
+    this.setupChart(chartData, dates);
+  }
+
+  /** CHART HELPER FUNCTIONS */
+
+  setupChart(data, labels) {
     this.clearChart();
+    let canvasElement = document.getElementsByClassName(this.canvasClass); // TODO: angular advise against using document directly
     this.chart = new Chart(canvasElement[0], {
       type: 'line',
       data: {
-        lablels: dates,
+        lablels: labels,
         datasets: [
           {
-            data: chartData,
+            data: data,
             fill: false,
             borderColor: "rgb(75, 192, 192)",
           }
@@ -116,8 +134,6 @@ export class CompanySummaryComponent implements OnInit {
       }
     });
   }
-
-  /** CHART HELPER FUNCTIONS */
 
   clearChart() {
     if (this.chart) {

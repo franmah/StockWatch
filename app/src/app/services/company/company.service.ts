@@ -21,8 +21,8 @@ export class CompanyService {
 
   getIntradayStockData(symbol: string) {
     let url = ApiCommon.baseTestUrl + ApiCommon.stableVersion + StockHistoricalData.baseUrl + symbol + "/" +
-      StockIntradayData.baseUrl + "?" + ApiCommon.tokenKey;
-
+      StockIntradayData.baseUrl + "?" + ApiCommon.tokenKeyTest;
+      
     return this.http.get(url);
   }
 }
