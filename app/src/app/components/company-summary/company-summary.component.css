@@ -1,13 +1,16 @@
 .company-summary-container {
     border: 2px solid;
+    display: flex;
+}
+
+.chart-container {
+    padding: 8px;
+    order: 1;
+    width: 50%;
+    height: 50%;
 }
 
 .info-container {
-    display: inline;
-}
-
-#chart-canvas {
-    height: 50%;
-    width: 50%;
-    background-color: black;
+    padding-left: 8px;
+    order: 2;
 }
