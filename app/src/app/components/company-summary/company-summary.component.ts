@@ -82,10 +82,8 @@ export class CompanySummaryComponent implements OnInit {
       times.push(stockInfo.label);
       chartData.push({
         t: new Date(stockInfo.date + "T" + stockInfo.minute),
-        y: stockInfo.average
+        y: stockInfo.close
       });
-      let d = new Date(stockInfo.date + "T" + stockInfo.minue);
-      console.log(d.toDateString)
     });
 
     this.setupChart(chartData, times);
