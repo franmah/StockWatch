@@ -1,0 +1,10 @@
+.form-group {
+    color: black;   
+    display: inline;
+}
+
+.search-error {
+    display: inline;
+    padding-left: 24px;
+    color: red;
+}

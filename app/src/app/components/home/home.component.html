@@ -1,3 +1,13 @@
+
+<div class="form-group">
+    <form>
+      <input  type="text" ng placeholder="Search for symbol.." name="search" [(ngModel)]="searchInput">
+      <button (click)="submitSearch()" type="submit">Search</button>
+      <div class="search-error" *ngIf="searchErrorMessage">{{ searchErrorMessage }}</div>
+  </form>
+</div>
+
+
 <div *ngFor="let company of companiesFollowed">
     <app-company-summary [symbol]="company" ></app-company-summary>
 </div>

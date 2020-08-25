@@ -14,8 +14,9 @@ export class CompanySummaryComponent implements OnInit {
   @ViewChild("chartCanvas") canvasRef: ElementRef;
 
   canvasClass: string;
-
   chart: any;
+  symbolError: boolean = false;
+  
   
   constructor(
     private elementRef: ElementRef,
@@ -33,6 +34,10 @@ export class CompanySummaryComponent implements OnInit {
    * @param range 
    */
   updateRange(range: string): void {
+    if (this.symbolError) {
+      return;
+    }
+
     let isRangeValid = Object.keys(StockRange).some((key) => {
       return StockRange[key] === range;
     });
@@ -54,7 +59,8 @@ export class CompanySummaryComponent implements OnInit {
         },
         error => {
           this.symbol = "Error finding : " + this.symbol;
-          console.log(`Error getting intraday data for ${this.symbol}: \n${error}`);
+          this.symbolError = true;
+          console.log(`Error getting intraday data for ${JSON.stringify(this.symbol)}: \n${error}`);
         }
       )
   }
