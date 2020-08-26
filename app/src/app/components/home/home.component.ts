@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyService } from '../../services/company/company.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
@@ -8,11 +9,12 @@ import { CompanyService } from '../../services/company/company.service';
 })
 export class HomeComponent implements OnInit {
 
-  readonly searchErrorMessageText = "Symbol not found";
+  readonly searchErrorMessageText = "No symbol found";
 
   companiesFollowed: string[]; // stock name of companies
   searchInput: string;
   searchErrorMessage: string = null;
+  searchResult: any[] = null;
 
   constructor(
     private companyService: CompanyService
@@ -22,34 +24,33 @@ export class HomeComponent implements OnInit {
     this.companiesFollowed = ["fb", "amzn"];
   }
 
-  // TODO: improve search: allow checking with company names and partial search
-  submitSearch() {
-    if (this.searchInput && this.searchInput !== "") {
-    this.companyService.searchForCompany(this.searchInput)
-      .subscribe(
-        response => { this.processSearch(response) },
-        error => { console.log(error) }
-      );
+  searchSymbol() {
+    if (this.searchInput && this.searchInput != "") {
+      this.companyService.searchForCompany(this.searchInput)
+        .subscribe(
+          response => {
+            this.processSearchResult(response);
+          },
+          error => { 
+            console.log(error);
+            this.setSearchError(true);
+         }
+        );
     }
   }
 
-  // TODO: add the whole company info object to the array and update the ngFor and company-summary.component
-  processSearch(data: any) {
-    this.searchInput = this.searchInput.toUpperCase();
-    
-    let company = data.find((companyInfo)  => {
-      return companyInfo.symbol === this.searchInput;
-    });
-
-    if (company && !this.isFollowingCompany(company.symbol)) {
-      this.companiesFollowed.unshift(company.symbol);
-    } else {
-      this.setSearchErrorMessage();
-      console.log("Error: no symbol found");
+  processSearchResult(data) {
+    if (!data || data.length === 0) {
+      this.setSearchError(true);
+      return;
     }
 
-    this.searchInput = null;
+    this.searchResult = data.map(company => company.symbol);
+    console.log(this.searchResult);
+
+    this.setSearchError(false);
   }
+  
 
   isFollowingCompany(symbol: string) {
     return this.companiesFollowed.indexOf(symbol) != -1 ? true : false;
@@ -59,11 +60,42 @@ export class HomeComponent implements OnInit {
    * Show an error message if aa symbol searched if not found. 
    * The message disappear after two second.
    */
-  setSearchErrorMessage() {
-    this.searchErrorMessage = this.searchErrorMessageText;
-    
-    setTimeout(() => {
+  setSearchError(showMessage) {
+    if (showMessage) {
+      this.searchErrorMessage = this.searchErrorMessageText;
+      this.searchResult = null;
+    } else {
       this.searchErrorMessage = null;
-    }, 2000); 
+    }
+  }
+
+
+  // TODO: improve search: allow checking with company names and partial search
+  OLDsubmitSearch() {
+    if (this.searchInput && this.searchInput !== "") {
+    this.companyService.searchForCompany(this.searchInput)
+      .subscribe(
+        response => { this.OLDprocessSearch(response) },
+        error => { console.log(error) }
+      );
+    }
+  }
+
+  // TODO: add the whole company info object to the array and update the ngFor and company-summary.component
+  OLDprocessSearch(data: any) {
+    this.searchInput = this.searchInput.toUpperCase();
+    
+    let company = data.find((companyInfo)  => {
+      return companyInfo.symbol === this.searchInput;
+    });
+
+    if (company && !this.isFollowingCompany(company.symbol)) {
+      this.companiesFollowed.unshift(company.symbol);
+    } else {
+      this.setSearchError(true);
+      console.log("Error: no symbol found");
+    }
+
+    this.searchInput = null;
   }
 }
