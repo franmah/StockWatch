@@ -1,19 +1,24 @@
 import { Injectable } from '@angular/core';
-import {remote} from 'electron';
-var fs = remote.require('fs');
-var path = remote.require('path');
+const fs = (<any>window).require("fs");
+const path = (<any>window).require("path");
+//mport { ipcRenderer } from 'electron'
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserFileService {
   savedStockFilePath: string;
-
+  
   constructor() { 
-    this.savedStockFilePath = path.resolve(__dirname);
+    ipcRenderer.on("test-back", (msg) => {
+      console.log(msg)
+    })
   }
 
   getFile() {
-    console.log(this.savedStockFilePath);
+    console.log("in get file")
+    //console.log(path.resolve("../"))
+    ipcRenderer.send("test")
   }
+
 }

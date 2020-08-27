@@ -26,6 +26,7 @@ export class HomeComponent implements OnInit {
 
 
     // TEST:
+    console.log("testing")
     this.userFileService.getFile();
     
   }
