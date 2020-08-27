@@ -22,18 +22,13 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.companiesFollowed = ["fb", "amzn"];
-
-
-    // TEST:
-    console.log("testing")
-    this.userFileService.getFile();
-    
+    this.companiesFollowed = this.userFileService.getFollowedCompanies();
   }
 
   followCompany(symbol: string) {
     if (symbol && symbol != "" && !this.isFollowingCompany(symbol)) {
       this.companiesFollowed.unshift(symbol);
+      this.userFileService.addFollowedCompanies(symbol);
     }
   }
 
@@ -61,8 +56,6 @@ export class HomeComponent implements OnInit {
     }
 
     this.searchResults = data.map(company => company.symbol);
-    console.log(this.searchResults);
-
     this.setSearchError(false);
   }
 

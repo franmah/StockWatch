@@ -60,7 +60,7 @@ export class CompanySummaryComponent implements OnInit {
         error => {
           this.symbol = "Error finding : " + this.symbol;
           this.symbolError = true;
-          console.log(`Error getting intraday data for ${JSON.stringify(this.symbol)}: \n${error}`);
+          console.log(`Error getting intraday data for ${JSON.stringify(this.symbol)}: \n${JSON.stringify(error, null, 2)}`);
         }
       )
   }
@@ -78,7 +78,7 @@ export class CompanySummaryComponent implements OnInit {
     },
     error => {
       this.symbol = "Error finding : " + this.symbol;
-      console.log(`Error getting stock info for ${this.symbol}:\n${error}`);
+      console.log(`Error getting stock info for ${this.symbol}:\n${JSON.stringify(error, null, 2)}`);
     });
   }
 
