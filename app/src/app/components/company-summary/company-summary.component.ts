@@ -16,6 +16,7 @@ export class CompanySummaryComponent implements OnInit {
   canvasClass: string;
   chart: any;
   symbolError: boolean = false;
+  symbolText: string;
   
   
   constructor(
@@ -25,6 +26,7 @@ export class CompanySummaryComponent implements OnInit {
 
   ngOnInit(): void {
     this.canvasClass = "canvas-" + this.symbol;
+    this.symbolText = this.symbol;
 
     this.getHistoricalCompanyData(StockRange.oneMonth);
   }
@@ -34,10 +36,6 @@ export class CompanySummaryComponent implements OnInit {
    * @param range 
    */
   updateRange(range: string): void {
-    if (this.symbolError) {
-      return;
-    }
-
     let isRangeValid = Object.keys(StockRange).some((key) => {
       return StockRange[key] === range;
     });
@@ -55,10 +53,11 @@ export class CompanySummaryComponent implements OnInit {
     this.companyService.getIntradayStockData(this.symbol)
       .subscribe (
         response => {
+          this.symbolText = this.symbol;
           this.setupIntradayChart(response);
         },
         error => {
-          this.symbol = "Error finding : " + this.symbol;
+          this.symbolText = "Error finding : " + this.symbol;
           this.symbolError = true;
           console.log(`Error getting intraday data for ${JSON.stringify(this.symbol)}: \n${JSON.stringify(error, null, 2)}`);
         }
@@ -74,14 +73,23 @@ export class CompanySummaryComponent implements OnInit {
     this.companyService.getHistoricalStockData(this.symbol, range)
     .subscribe(
       response => {
-      this.setupHistoricalChart(response);
-    },
-    error => {
-      this.symbol = "Error finding : " + this.symbol;
-      console.log(`Error getting stock info for ${this.symbol}:\n${JSON.stringify(error, null, 2)}`);
-    });
+        this.symbolText = this.symbol;
+        this.setupHistoricalChart(response);
+      },
+      error => {
+        this.symbolText = "Error finding : " + this.symbol;
+        if (error.status === 429) {
+          console.log("Error 429: too many requests too quickly")
+          this.handleRequestLimitError(range);
+        } else {
+          console.log(`Error getting stock info for ${this.symbol}:\n${JSON.stringify(error, null, 2)}`);
+        }
+      });
   }
 
+  /**
+   * CHART HELPER FUNCTIONS
+   */
   setupIntradayChart(data): void {
     let chartData = [], times = [];
 
@@ -109,8 +117,6 @@ export class CompanySummaryComponent implements OnInit {
 
     this.createChart(chartData, dates);
   }
-
-  /** CHART HELPER FUNCTIONS */
 
   createChart(data, labels) {
     this.clearChart();
@@ -155,4 +161,18 @@ export class CompanySummaryComponent implements OnInit {
       this.chart = null;
     }
   }
+
+  /**
+   * HTTP HELPER FUNCTIONS
+   */
+
+   /**
+    * Try sending request to API after 10 milliseconds (time in between request)
+    * @param range 
+    */
+   handleRequestLimitError(range: string) {
+    setTimeout(() => {
+      this.updateRange(range);
+    }, 10);
+   }
 }

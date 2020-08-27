@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { ApiCommon, StockHistoricalData, StockRange, StockIntradayData, StockEarningParameters } from '../../shared-ressources/apiParameters';
+import { ApiCommon, StockHistoricalData, StockIntradayData, StockEarningParameters } from '../../shared-ressources/apiParameters';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,6 @@ export class CompanyService {
   getHistoricalStockData(symbol: string, range: string) {
     let url = ApiCommon.baseTestUrl + ApiCommon.stableVersion + StockHistoricalData.baseUrl +
         symbol + "/" + StockHistoricalData.chart + range + "?" + StockHistoricalData.chartCloseOnly + "&" + ApiCommon.tokenKeyTest;
-    console.log(url);
     return this.http.get(url);
   }
 
