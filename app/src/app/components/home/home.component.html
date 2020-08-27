@@ -5,6 +5,10 @@
       <button (click)="searchSymbol()" type="submit">Search</button>
       <div class="search-error" *ngIf="searchErrorMessage">{{ searchErrorMessage }}</div>
   </form>
+
+  <div class="search-result-container" *ngFor="let symbol of searchResults">
+    <div class="search-result-item" (click)="followCompany(symbol)" >{{ symbol }}</div>
+  </div>
 </div>
 
 <div *ngFor="let company of companiesFollowed">
